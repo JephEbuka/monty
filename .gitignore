@@ -1,0 +1,3 @@
+*.o
+monty
+bytecodes/local_*.m
