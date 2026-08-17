@@ -1,6 +1,6 @@
 #include "monty.h"
 
-monty_state_t monty = {NULL, NULL, NULL};
+monty_state_t monty = {NULL, NULL, NULL, 0};
 
 /**
  * main - run the Monty bytecode interpreter
@@ -35,10 +35,12 @@ int main(int argc, char **argv)
 		(void)read;
 		line_number++;
 		opcode = strtok(monty.line, " \t\r\n");
+
 		if (opcode == NULL || opcode[0] == '#')
 			continue;
 
 		monty.arg = strtok(NULL, " \t\r\n");
+
 		if (execute_opcode(opcode, &stack, line_number) == EXIT_FAILURE)
 		{
 			fprintf(stderr, "L%u: unknown instruction %s\n",
@@ -50,5 +52,6 @@ int main(int argc, char **argv)
 	free_stack(stack);
 	free(monty.line);
 	fclose(monty.file);
+
 	return (EXIT_SUCCESS);
 }

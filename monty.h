@@ -35,14 +35,16 @@ typedef struct instruction_s
 /**
  * struct monty_state_s - interpreter state
  * @arg: current opcode argument
- * @line: buffer used by getline
+ * @line: line buffer used by getline
  * @file: opened Monty bytecode file
+ * @mode: 0 for stack mode, 1 for queue mode
  */
 typedef struct monty_state_s
 {
 	char *arg;
 	char *line;
 	FILE *file;
+	int mode;
 } monty_state_t;
 
 extern monty_state_t monty;
@@ -58,6 +60,12 @@ void op_sub(stack_t **stack, unsigned int line_number);
 void op_div(stack_t **stack, unsigned int line_number);
 void op_mul(stack_t **stack, unsigned int line_number);
 void op_mod(stack_t **stack, unsigned int line_number);
+void op_pchar(stack_t **stack, unsigned int line_number);
+void op_pstr(stack_t **stack, unsigned int line_number);
+void op_rotl(stack_t **stack, unsigned int line_number);
+void op_rotr(stack_t **stack, unsigned int line_number);
+void op_stack(stack_t **stack, unsigned int line_number);
+void op_queue(stack_t **stack, unsigned int line_number);
 
 int execute_opcode(char *opcode, stack_t **stack, unsigned int line_number);
 void free_stack(stack_t *stack);

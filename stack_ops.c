@@ -30,13 +30,38 @@ static int is_integer(char *value)
 }
 
 /**
- * op_push - push an integer onto the stack
+ * new_node - allocate a new stack node
+ * @value: integer value to store
+ * @stack: current stack for cleanup on failure
+ *
+ * Return: pointer to the new node
+ */
+static stack_t *new_node(int value, stack_t *stack)
+{
+	stack_t *node = malloc(sizeof(stack_t));
+
+	if (node == NULL)
+	{
+		fprintf(stderr, "Error: malloc failed\n");
+		monty_fail(stack);
+	}
+
+	node->n = value;
+	node->prev = NULL;
+	node->next = NULL;
+
+	return (node);
+}
+
+/**
+ * op_push - push an integer according to the current mode
  * @stack: pointer to the stack
  * @line_number: current line number
  */
 void op_push(stack_t **stack, unsigned int line_number)
 {
 	stack_t *node;
+	stack_t *tail;
 
 	if (!is_integer(monty.arg))
 	{
@@ -44,21 +69,23 @@ void op_push(stack_t **stack, unsigned int line_number)
 		monty_fail(*stack);
 	}
 
-	node = malloc(sizeof(stack_t));
-	if (node == NULL)
+	node = new_node(atoi(monty.arg), *stack);
+
+	if (monty.mode == 0 || *stack == NULL)
 	{
-		fprintf(stderr, "Error: malloc failed\n");
-		monty_fail(*stack);
+		node->next = *stack;
+		if (*stack != NULL)
+			(*stack)->prev = node;
+		*stack = node;
+		return;
 	}
 
-	node->n = atoi(monty.arg);
-	node->prev = NULL;
-	node->next = *stack;
+	tail = *stack;
+	while (tail->next != NULL)
+		tail = tail->next;
 
-	if (*stack != NULL)
-		(*stack)->prev = node;
-
-	*stack = node;
+	tail->next = node;
+	node->prev = tail;
 }
 
 /**

@@ -22,6 +22,12 @@ int execute_opcode(char *opcode, stack_t **stack, unsigned int line_number)
 		{"div", op_div},
 		{"mul", op_mul},
 		{"mod", op_mod},
+		{"pchar", op_pchar},
+		{"pstr", op_pstr},
+		{"rotl", op_rotl},
+		{"rotr", op_rotr},
+		{"stack", op_stack},
+		{"queue", op_queue},
 		{NULL, NULL}
 	};
 	int index = 0;
